@@ -27,36 +27,51 @@ int GetChunk5()
 	for (i = 0; i <= 7; i++) {
 		Chunk5 += SetChunk5[i] * pow(2, i);
 		//int c = pow(2, i);
-		printf("%d\n", Chunk5);
+		//printf("Chunk5 from the GetChunk5() function %d\n", Chunk5);
 	}
 	system("PAUSE");
 	return Chunk5;
 }
 
-int main() {
-	double Chunk1=0.0, Chunk2 = 0.0, Chunk3 = 0.0, Chunk4 = 0.0, Chunk5 = 0.0;
+struct myret { //https://stackoverflow.com/questions/9981488/how-do-you-pass-multiple-variables-from-functions-to-main-in-c
+	double Chunk1;
+	double Chunk2;
+	double Chunk3;
+	double Chunk4;
+	double Chunk5;
+};
+
+int DataPack(struct myret *Data) {
+	double U1BI = 6.1, U1BV = 6.2, U1PI = 6.3; 
 	//when uploading to the microcontroller these will be specified in the setup void
+	//these values shown here will be inhereted from the unit later on???
+	if (Data) {
+		Data->Chunk1 = U1BI;
+		Data->Chunk2 = U1BV;
+		Data->Chunk3 = U1PI;
 
-	Chunk5 = GetChunk5();//store int to double so that all chunks have the same size
+		printf("U1PV:");
+		scanf_s("%lf", &Data->Chunk4);
+		system("PAUSE");
 
-	//these values shown here will be inhereted from the unit later on
-	/*double x = 2.65;
-	printf("%f\n", x);
-	printf("%d\n", sizeof(x));
-	system("PAUSE");*/
-	printf("U1BI:");
-	scanf_s("%ld", &Chunk1);
-	//printf("%d\n", sizeof(Chunk1));
+		Data->Chunk5 = GetChunk5();
+	}
+	return 0;
+}
 
-	printf("U1BV:");
-	scanf_s("%ld", &Chunk2);
+int main() {
+	struct myret Data;
+	int DataCheck = DataPack(&Data);
+	if (DataCheck == 0) {
+		printf("%f\n", Data.Chunk1);
+		printf("%f\n", Data.Chunk2);
+		printf("%f\n", Data.Chunk3);
 
-	printf("U2BI:");
-	scanf_s("%ld", &Chunk3);
+		double U1PV = Data.Chunk4;
+		printf("%f\n", U1PV);
 
-	printf("U2BV:");
-	scanf_s("%ld", &Chunk4);
-
+		printf("%f\n", Data.Chunk5);
+	}
 	system("PAUSE");
 	return 0;
 }
